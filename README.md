@@ -6,16 +6,28 @@
 ---
 
 ## 📂 Project Overview: CSD0111 – Project Studio-I
-This repository contains my individual mini-project developed for the **Project Studio-I** course. It integrates multiple technologies to solve a real-world problem as per university guidelines.
+This repository contains my comprehensive individual mini-project developed for the **Project Studio-I** course. It integrates multi-disciplinary components—ranging from technical documentation to web development—to solve a real-world problem as per university guidelines.
 
 ---
 
-## 🛠️ Tech Stack & Components Included:
-* **MS Word:** Professional project report and comprehensive documentation.
-* **MS Excel:** Data workbook featuring records, formulas, and analytical charts.
-* **MS PowerPoint:** Structured presentation slides covering project objectives.
-* **HTML5 / CSS3 / JavaScript:** Fully functional and interactive web application.
-* **Screenshots:** Proof of working application interfaces.
+## 🛠️ Detailed Tech Stack & Components
+
+### 1. 📄 MS Word Documentation
+* **Content:** Complete project report, abstract, introduction, system architecture, and conclusion.
+* **Formatting:** Professional styling, headings, tables, and references as per academic standards.
+
+### 2. 📊 MS Excel Workbook
+* **Data Set:** Contains over 20 structured records for data analysis.
+* **Formulas & Functions:** Implements advanced formulas, logical tests, and mathematical calculations.
+* **Visualizations:** Features 2 professional analytical charts/graphs representing trends.
+
+### 3. 🎯 MS PowerPoint Presentation
+* **Structure:** Clean, slide-by-slide professional deck outlining the project objective, workflow, and results.
+* **Design:** High-contrast layout optimized for academic review and presentation.
+
+### 4. 🌐 HTML5 / CSS3 / JavaScript Web Application
+* **Frontend:** Fully responsive web interface with clean HTML structure and modern CSS styling.
+* **Interactivity:** Integrated JavaScript for form validation, dynamic elements, and smooth user experience.
 
 ---
 
