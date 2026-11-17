@@ -1,65 +1,176 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
-<meta charset="UTF-8">
-<title>Student Record Management System</title>
-<style>
-  body { font-family: Arial, sans-serif; background: #f0f2f5; padding: 20px; }
-  .box { max-width: 700px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-  h2 { text-align: center; color: #333; }
-  input, button { padding: 10px; margin: 5px 0; width: 100%; box-sizing: border-box; }
-  button { background: #007bff; color: #fff; border: none; cursor: pointer; font-weight: bold; }
-  button:hover { background: #0056b3; }
-  table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-  th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
-  th { background: #007bff; color: white; }
-  .del-btn { background: #dc3545; width: auto; padding: 5px 10px; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Record Management System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 700px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .search-box {
+            margin: 20px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        .delete-btn {
+            background-color: #dc3545;
+            padding: 5px 10px;
+        }
+        .delete-btn:hover {
+            background-color: #a71d2a;
+        }
+    </style>
 </head>
 <body>
-<div class="box">
-  <h2>Student Record Management System</h2>
-  <input type="text" id="roll" placeholder="Enter Roll Number (e.g., BETN1CS26134)">
-  <input type="text" id="name" placeholder="Enter Student Name">
-  <input type="number" id="marks" placeholder="Enter Marks (0-100)">
-  <button onclick="addStudent()">Add Student Record</button>
-  <input type="text" id="search" onkeyup="searchStudent()" placeholder="Search by Name or Roll No...">
-  <table>
-    <thead><tr><th>Roll No</th><th>Name</th><th>Marks</th><th>Grade</th><th>Action</th></tr></thead>
-    <tbody id="tableBody"></tbody>
-  </table>
+
+<div class="container">
+    <h2>Student Record Management System</h2>
+
+    <!-- 1. Form & Validation -->
+    <form id="studentForm" onsubmit="addStudent(event)">
+        <div class="form-group">
+            <label for="studentName">Student Name:</label>
+            <input type="text" id="studentName" placeholder="पूरा नाम दर्ज करें">
+        </div>
+        <div class="form-group">
+            <label for="rollNo">Roll Number:</label>
+            <input type="text" id="rollNo" placeholder="रोल नंबर दर्ज करें">
+        </div>
+        <div class="form-group">
+            <label for="marks">Marks / Percentage:</label>
+            <input type="number" id="marks" placeholder="अंक दर्ज करें">
+        </div>
+        <button type="submit">Add Record</button>
+    </form>
+
+    <!-- 4. Search Functionality -->
+    <div class="search-box">
+        <label for="searchInput">Search Student:</label>
+        <input type="text" id="searchInput" onkeyup="searchStudent()" placeholder="नाम से खोजें...">
+    </div>
+
+    <!-- Data Table -->
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Roll No</th>
+                <th>Marks</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="studentTable">
+            <!-- डायनामिक रिकॉर्ड यहाँ जुड़ेंगे -->
+        </tbody>
+    </table>
 </div>
+
 <script>
-  let students = JSON.parse(localStorage.getItem('students')) || [];
-  function getGrade(m) { return m >= 75 ? 'A' : m >= 60 ? 'B' : m >= 40 ? 'C' : 'Fail'; }
-  function render(data = students) {
-    const tbody = document.getElementById('tableBody');
-    tbody.innerHTML = '';
-    data.forEach((s, i) => {
-      tbody.innerHTML += `<tr><td>${s.roll}</td><td>${s.name}</td><td>${s.marks}</td><td>${getGrade(s.marks)}</td>
-      <td><button class="del-btn" onclick="deleteStudent(${i})">Delete</button></td></tr>`;
-    });
-  }
-  function addStudent() {
-    const roll = document.getElementById('roll').value.trim();
-    const name = document.getElementById('name').value.trim();
-    const marks = Number(document.getElementById('marks').value);
-    if (!roll || !name || marks < 0 || marks > 100) return alert('Please enter valid details!');
-    students.push({ roll, name, marks });
-    localStorage.setItem('students', JSON.stringify(students));
-    render();
-    document.getElementById('roll').value = ''; document.getElementById('name').value = ''; document.getElementById('marks').value = '';
-  }
-  function deleteStudent(i) {
-    students.splice(i, 1);
-    localStorage.setItem('students', JSON.stringify(students));
-    render();
-  }
-  function searchStudent() {
-    const q = document.getElementById('search').value.toLowerCase();
-    render(students.filter(s => s.name.toLowerCase().includes(q) || s.roll.toLowerCase().includes(q)));
-  }
-  render();
+    // Function 1 & 2: Form Validation & Add Student Record
+    function addStudent(event) {
+        event.preventDefault();
+        let name = document.getElementById('studentName').value.trim();
+        let roll = document.getElementById('rollNo').value.trim();
+        let marks = document.getElementById('marks').value.trim();
+
+        // Form Validation Check
+        if (name === "" || roll === "" || marks === "") {
+            alert("त्रुटि: कृपया सभी फील्ड्स को भरें!");
+            return false;
+        }
+
+        let table = document.getElementById('studentTable');
+        let row = table.insertRow();
+        
+        row.innerHTML = `<td>${name}</td>
+                         <td>${roll}</td>
+                         <td>${marks}</td>
+                         <td><button class="delete-btn" onclick="deleteRow(this)">Delete</button></td>`;
+        
+        alert("स्टूडेंट रिकॉर्ड सफलतापूर्वक जोड़ दिया गया है!");
+        document.getElementById('studentForm').reset();
+    }
+
+    // Function 3: Delete Record
+    function deleteRow(btn) {
+        let row = btn.parentNode.parentNode;
+        row.parentNode.removeChild(row);
+        alert("रिकॉर्ड सफलतापूर्वक हटा दिया गया है।");
+    }
+
+    // Function 4: Search/Filter Records
+    function searchStudent() {
+        let input = document.getElementById('searchInput').value.toLowerCase();
+        let table = document.getElementById('studentTable');
+        let tr = table.getElementsByTagName('tr');
+
+        for (let i = 0; i < tr.length; i++) {
+            let td = tr[i].getElementsByTagName('td')[0];
+            if (td) {
+                let txtValue = td.textContent || td.innerText;
+                if (txtValue.toLowerCase().indexOf(input) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
 </script>
+
 </body>
 </html>
