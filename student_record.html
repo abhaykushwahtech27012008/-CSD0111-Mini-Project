@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Student Record Management System</title>
+<style>
+  body { font-family: Arial, sans-serif; background: #f0f2f5; padding: 20px; }
+  .box { max-width: 700px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+  h2 { text-align: center; color: #333; }
+  input, button { padding: 10px; margin: 5px 0; width: 100%; box-sizing: border-box; }
+  button { background: #007bff; color: #fff; border: none; cursor: pointer; font-weight: bold; }
+  button:hover { background: #0056b3; }
+  table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+  th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+  th { background: #007bff; color: white; }
+  .del-btn { background: #dc3545; width: auto; padding: 5px 10px; }
+</style>
+</head>
+<body>
+<div class="box">
+  <h2>Student Record Management System</h2>
+  <input type="text" id="roll" placeholder="Enter Roll Number (e.g., BETN1CS26134)">
+  <input type="text" id="name" placeholder="Enter Student Name">
+  <input type="number" id="marks" placeholder="Enter Marks (0-100)">
+  <button onclick="addStudent()">Add Student Record</button>
+  <input type="text" id="search" onkeyup="searchStudent()" placeholder="Search by Name or Roll No...">
+  <table>
+    <thead><tr><th>Roll No</th><th>Name</th><th>Marks</th><th>Grade</th><th>Action</th></tr></thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+</div>
+<script>
+  let students = JSON.parse(localStorage.getItem('students')) || [];
+  function getGrade(m) { return m >= 75 ? 'A' : m >= 60 ? 'B' : m >= 40 ? 'C' : 'Fail'; }
+  function render(data = students) {
+    const tbody = document.getElementById('tableBody');
+    tbody.innerHTML = '';
+    data.forEach((s, i) => {
+      tbody.innerHTML += `<tr><td>${s.roll}</td><td>${s.name}</td><td>${s.marks}</td><td>${getGrade(s.marks)}</td>
+      <td><button class="del-btn" onclick="deleteStudent(${i})">Delete</button></td></tr>`;
+    });
+  }
+  function addStudent() {
+    const roll = document.getElementById('roll').value.trim();
+    const name = document.getElementById('name').value.trim();
+    const marks = Number(document.getElementById('marks').value);
+    if (!roll || !name || marks < 0 || marks > 100) return alert('Please enter valid details!');
+    students.push({ roll, name, marks });
+    localStorage.setItem('students', JSON.stringify(students));
+    render();
+    document.getElementById('roll').value = ''; document.getElementById('name').value = ''; document.getElementById('marks').value = '';
+  }
+  function deleteStudent(i) {
+    students.splice(i, 1);
+    localStorage.setItem('students', JSON.stringify(students));
+    render();
+  }
+  function searchStudent() {
+    const q = document.getElementById('search').value.toLowerCase();
+    render(students.filter(s => s.name.toLowerCase().includes(q) || s.roll.toLowerCase().includes(q)));
+  }
+  render();
+</script>
+</body>
+</html>
